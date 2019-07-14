@@ -1,0 +1,188 @@
+NAVBAR:
+		
+	<div class="row">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand logo" href="#">{{ title }}</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+
+      </div>
+    </div>
+  </nav>
+</div>
+
+======================
+
+Gallery:
+
+	<div class="row">
+ <h2>Gallery</h2>
+  <ul id="thumbnailsList">
+    <li *ngFor="let image of allImages | paginate:{itemsPerPage:5,currentPage:p}">
+      <a [routerLink]="['/image', image.id]">
+        <img id="image" src="{{image.url}}" class="tn"   width="100" height="100">
+      </a>
+    </li>
+  </ul>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+.ts:
+	allImages: any[] = [];
+  constructor(private imageservice: ImageService) {  
+    for(let i=1;i<=5;i++){
+      this.allImages.push('image ${i}');
+    }
+  }
+
+  ngOnInit() {
+    this.allImages = this.imageservice.getImages();
+  }
+
+
+
+.css
+
+	
+li { display:inline;}
+    .tn{
+ margin:6px 6px;
+ border: 4px solid #eee;
+ box-shadow:#555 1px 1px 8px 1px;
+ cursor: pointer
+    }
+.modal-content {
+  width: 1200px !important;
+}
+ul li a:hover img {
+    transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+h2{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-left: 10px;
+}
+/* #image{
+    width:50px;
+    height:50px;
+}
+
+#image:hover{
+    width:100px;
+    height:100px;
+} */
+
+.row{
+    margin-top: 115px;
+    /* margin-bottom: 26px; */
+    border-style: double;
+    margin-left: 165px;
+    margin-right: 306px;
+}
+
+===========================
+Image:
+
+<div class="row">
+  <div class=col-md-12>
+    <div [ngStyle]="{'background-image':'url('+ image.url +')'}" class="img-container paper">
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-md-12 author-row">
+      <span id="author">
+        <input type="text" value="{{image.author}}">
+      </span>
+      <br>
+      <br>
+      <a href='{{image.link}}'>Download</a>
+    </div>
+    
+</div>
+
+
+.css
+
+.img-container{
+    margin:24px;
+    box-shadow:#555 1px 2px 8px 1px;
+    min-height: 660px;
+    min-width: 900px;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-content: center;
+}
+
+#author{
+  font-size: 1.5em;
+  font-family: "Montserrat", sans-serif;
+  padding: 18px;
+  color: #222;
+  background-color: #f5f5f5;
+  border: 1px solid #bbb;
+  width: 900px;
+}
+
+.author-row{
+  padding: 24px;
+  text-align: center;
+}
+
+
+.ts
+	image:any
+  constructor(private imageservice:ImageService,private route:ActivatedRoute) { }
+
+  ngOnInit() {
+    this.image=this.imageservice.getImage(
+      +this.route.snapshot.params['id']
+    )
+  }
+
+=========================
+service:
+	allImages = [];
+  constructor() { }
+
+  getImages() {
+    return this.allImages = IMAGES.slice(0);
+  }
+  getImage(id: number) {
+    return IMAGES.slice(0).find(image => image.id == id)
+  }
+}
+
+const IMAGES = [
+  { "id": 1, "author": "View from the boat", "link": "assets/img/boat_01.jpeg", "url": "assets/img/boat_01.jpeg" },
+  { "id": 2, "author": "Sailing the coast", "link": "assets/img/boat_02.jpeg", "url": "assets/img/boat_02.jpeg" },
+  { "id": 3, "author": "The water was nice", "link": "assets/img/boat_03.jpeg", "url": "assets/img/boat_03.jpeg" },
+  { "id": 4, "author": "Cool water cavern", "link": "assets/img/boat_04.jpeg", "url": "assets/img/boat_04.jpeg" },
+  { "id": 5, "author": "Sunset at the docks", "link": "assets/img/boat_05.jpeg", "url": "assets/img/boat_05.jpeg" },
+  { "id": 6, "author": "Camping Trip '17'", "link": "assets/img/camping_01.jpeg", "url": "assets/img/camping_01.jpeg" },
+  { "id": 7, "author": "Kim and Jessie", "link": "assets/img/camping_02.jpeg", "url": "assets/img/camping_02.jpeg" },
+  { "id": 8, "author": "View from the top", "link": "assets/img/camping_03.jpeg", "url": "assets/img/camping_03.jpeg" },
+  { "id": 9, "author": "On the trail", "link": "assets/img/camping_04.jpg", "url": "assets/img/camping_04.jpg" },
+  { "id": 10, "author": "Our camping spot", "link": "assets/img/camping_05.jpeg", "url": "assets/img/camping_05.jpeg" },
+  { "id": 11, "author": "RV Life", "link": "assets/img/camping_06.jpg", "url": "assets/img/camping_06.jpg" },
+  { "id": 12, "author": "Hiking trip 2017", "link": "assets/img/camping_07.jpeg","url": "assets/img/camping_07.jpeg" },
+  { "id": 13, "author": "Big library", "link": "assets/img/library_01.jpeg", "url": "assets/img/library_01.jpeg" },
+  { "id": 14, "author": "Stacks", "link": "assets/img/library_02.jpeg", "url": "assets/img/library_02.jpeg" },
+  { "id": 15, "author": "Saturday afternoon", "link": "assets/img/library_03.jpeg", "url": "assets/img/library_03.jpeg" },
+  { "id": 16, "author": "Local library", "link": "assets/img/library_04.jpeg", "url": "assets/img/library_04.jpeg" },
+  { "id": 17, "author": "Nice library", "link": "assets/img/library_05.jpeg", "url": "assets/img/library_05.jpeg" }
+]
+
+=================
+
+{ path: "gallery", component: GalleryComponent },
+  { path: "image/:id", component: ImageComponent },
+  { path: ":id", component: ImageComponent },
+  { path: "", redirectTo: "gallery", pathMatch: 'full' },
+
+================
+
+	
+	
